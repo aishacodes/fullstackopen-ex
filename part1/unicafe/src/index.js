@@ -8,6 +8,14 @@ const Botton = ({handleEvent, text}) => {
   <button onClick={handleEvent}>{text}</button>
   )
 }
+const Statistics = ({text, operation}) => {
+  
+  return(
+    <div>
+      <h3>{text} {operation}</h3>
+    </div>
+  )
+}
 
 
 
@@ -27,14 +35,13 @@ let all;
       <Botton handleEvent = {() => setNeutral(neutral+1)} text="Neutral"/>
       <Botton handleEvent = {() => setBad(bad+1)} text="Bad"/>
       <h1>Statistics</h1>
-        <h3>Good {good}</h3> 
-        <h3>Neutral {neutral}</h3>
-        <h3>Bad {bad}</h3>
-        <h3>All { all = good + neutral + bad}</h3>
-        <h3>Average {(good *1)+(neutral*0) + (bad* -1) / 3}</h3>
-        <h3>Positive {(good/all)* 1
-        *100 || 0}%</h3>
-
+        <Statistics text= "Good" operation={good} />
+        <Statistics text= "Neutral" operation={neutral} />
+        <Statistics text= "Bad" operation={bad} />
+        <Statistics text= "All" operation={ all = good + neutral + bad} />
+        <Statistics text ="Average" operation={(good *1)+(neutral*0) + (bad* -1) / 3}/>
+        <Statistics text="Positive" operation={(good/all)* 1
+        *100 || 0}/>
     </div>
   )
 }
