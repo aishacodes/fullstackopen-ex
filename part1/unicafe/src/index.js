@@ -35,13 +35,18 @@ let all;
       <Botton handleEvent = {() => setNeutral(neutral+1)} text="Neutral"/>
       <Botton handleEvent = {() => setBad(bad+1)} text="Bad"/>
       <h1>Statistics</h1>
-        <Statistics text= "Good" operation={good} />
-        <Statistics text= "Neutral" operation={neutral} />
-        <Statistics text= "Bad" operation={bad} />
-        <Statistics text= "All" operation={ all = good + neutral + bad} />
-        <Statistics text ="Average" operation={(good *1)+(neutral*0) + (bad* -1) / 3}/>
-        <Statistics text="Positive" operation={(good/all)* 1
-        *100 || 0}/>
+      { 
+        (good || bad || neutral) ? (
+          <>
+          <Statistics text= "Good" operation={good} />
+          <Statistics text= "Neutral" operation={neutral} />
+          <Statistics text= "Bad" operation={bad} />
+          <Statistics text= "All" operation={ all = good + neutral + bad} />
+          <Statistics text ="Average" operation={(good *1)+(neutral*0) + (bad* -1) / 3}/>
+          <Statistics text="Positive" operation={(good/all)* 1
+          *100 || 0}/>
+          </>
+         ) : <h4>No feedback given</h4> }
     </div>
   )
 }
