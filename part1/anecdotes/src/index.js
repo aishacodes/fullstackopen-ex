@@ -22,12 +22,10 @@ const App = () => {
   const handleDotes = () => setSelected(randomNumber(0, anecdotes.length));
 
   const handleVote = () => {
-    setPoints((votes) =>
-      votes.map((vote, index) => {
-        if (index === selected) vote += 1;
-        return vote;
-      })
-    );
+    console.log(points);
+    let copy = [...points];
+    copy[selected] += 1;
+    setPoints(copy);
   };
 
   return (
@@ -36,7 +34,6 @@ const App = () => {
       <p>has {points[selected] > 0 ? points[selected] : 0} votes</p>
       <button onClick={handleDotes}>next anecdotes</button>
       <button onClick={handleVote}>Vote</button>
-      {console.log(points)}
     </div>
   );
 };
