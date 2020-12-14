@@ -27,6 +27,9 @@ const App = () => {
     copy[selected] += 1;
     setPoints(copy);
   };
+  let max = Math.max(...points);
+
+  let highestIndex = points.indexOf(max);
 
   return (
     <div>
@@ -34,6 +37,15 @@ const App = () => {
       <p>has {points[selected] > 0 ? points[selected] : 0} votes</p>
       <button onClick={handleDotes}>next anecdotes</button>
       <button onClick={handleVote}>Vote</button>
+      <h3>Anecdotes with the most votes</h3>
+      {max > 0 ? (
+        <>
+          <span> {anecdotes[highestIndex]}</span>
+          <p>has {points[highestIndex]} votes</p>
+        </>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
