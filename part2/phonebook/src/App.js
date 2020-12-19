@@ -6,8 +6,18 @@ const App = () => {
 
   const AddName = (event) => {
     event.preventDefault();
-
-    setPersons([...persons, { name: newName }]);
+    if (!newName.trim()) return null;
+    if (
+      persons.find(
+        (person) =>
+          person.name.toLowerCase().trim() === newName.toLowerCase().trim()
+      )
+    ) {
+      alert(`${newName} is already added to phonebook`);
+      setNewName("");
+      return;
+    }
+    setPersons([...persons, { name: newName.trim() }]);
     setNewName("");
   };
 
