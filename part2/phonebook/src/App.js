@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", phoneNumber: "040 - 1234567" },
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const AddName = (event) => {
     event.preventDefault();
@@ -17,8 +20,12 @@ const App = () => {
       setNewName("");
       return;
     }
-    setPersons([...persons, { name: newName.trim() }]);
+    setPersons([
+      ...persons,
+      { name: newName.trim(), phoneNumber: newNumber.trim() },
+    ]);
     setNewName("");
+    setNewNumber("");
   };
 
   return (
@@ -28,6 +35,14 @@ const App = () => {
         <div>
           name:{" "}
           <input value={newName} onChange={(e) => setNewName(e.target.value)} />
+        </div>{" "}
+        <br />
+        <div>
+          number:{" "}
+          <input
+            value={newNumber}
+            onChange={(e) => setNewNumber(e.target.value)}
+          />
         </div>
         <div>
           <button type="submit">add</button>
@@ -35,7 +50,9 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {persons.map((person) => (
-        <p key={person.name}>{person.name}</p>
+        <p key={person.name}>
+          {person.name} {person.phoneNumber}
+        </p>
       ))}{" "}
     </div>
   );
