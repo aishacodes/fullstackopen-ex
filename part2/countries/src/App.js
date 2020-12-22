@@ -54,7 +54,9 @@ function App() {
         ) : countryToShow.length > 10 ? (
           "Too many searches, specify another filter"
         ) : (
-          countryToShow.map((country) => <p>{country.name}</p>)
+          countryToShow.map((country) => (
+            <p key={country.name}>{country.name}</p>
+          ))
         )}
       </div>
     </div>
