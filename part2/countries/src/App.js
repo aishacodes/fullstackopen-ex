@@ -5,6 +5,20 @@ import { useEffect, useState } from "react";
 const SingleCountry = ({ info, showByDefault }) => {
   const { name, languages, flag, population, capital } = info;
   const [show, setShow] = useState(false);
+  const [weather, setWeather] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${key}&query=${capital}`
+      )
+      .then((response) => {
+        console.log(response.data);
+        setWeather(response.data);
+      })
+      .catch((err) => console.log({ err }));
+  }, [capital]);
+
   return (
     <div key={name}>
       <h2>{name}</h2>
@@ -19,6 +33,18 @@ const SingleCountry = ({ info, showByDefault }) => {
             ))}
           </ul>
           <img src={flag} style={{ width: "7rem" }} alt="country" />{" "}
+          {weather && (
+            <div>
+              <h4>Weather in {capital}</h4>
+
+              <p>Temperature: {weather.current.temperature} celcius</p>
+              <img src={weather.current.weather_icons} alt="" />
+              <p>
+                Wind: {weather.current.wind_speed}mph direction:{" "}
+                {weather.current.wind_dir}
+              </p>
+            </div>
+          )}
         </>
       ) : (
         <button onClick={() => setShow(true)}>show</button>
@@ -26,6 +52,8 @@ const SingleCountry = ({ info, showByDefault }) => {
     </div>
   );
 };
+
+const key = process.env.REACT_APP_KEY;
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -49,6 +77,7 @@ function App() {
 
   return (
     <div className="App">
+      <br />
       Find countries{" "}
       <input
         type="text"
