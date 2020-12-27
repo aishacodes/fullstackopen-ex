@@ -30,12 +30,12 @@ const App = () => {
       setNewName("");
       return;
     }
-    setPersons([
-      ...persons,
-      { name: newName.trim(), number: newNumber.trim() },
-    ]);
-    setNewName("");
-    setNewNumber("");
+    const newObj = { name: newName.trim(), number: newNumber.trim() };
+    axios.post("http://localhost:3001/persons", newObj).then((res) => {
+      setPersons([...persons, res.data]);
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   // const handleFilter = (ev) => {
