@@ -3,7 +3,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
-import axios from "axios";
+import phoneServices from "./services/phoneServices";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,9 +12,7 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((res) => setPersons(res.data));
+    phoneServices.getAll().then((res) => setPersons(res.data));
   }, []);
 
   const AddName = (event) => {
@@ -31,7 +29,7 @@ const App = () => {
       return;
     }
     const newObj = { name: newName.trim(), number: newNumber.trim() };
-    axios.post("http://localhost:3001/persons", newObj).then((res) => {
+    phoneServices.create(newObj).then((res) => {
       setPersons([...persons, res.data]);
       setNewName("");
       setNewNumber("");
