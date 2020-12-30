@@ -59,6 +59,12 @@ const App = () => {
   const handleFilterCh = (e) => setFilter(e.target.value);
   const contactToShow = handleFilter.length ? handleFilter : persons;
 
+  const handleDelete = (id) => {
+    phoneServices.removePerson(id).then(() => {
+      setPersons((persons) => persons.filter((person) => person.id !== id));
+    });
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -72,7 +78,7 @@ const App = () => {
         handleNewNumber={handleNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={contactToShow} />
+      <Persons persons={contactToShow} handleDeletee={handleDelete} />
     </div>
   );
 };
