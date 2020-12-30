@@ -18,22 +18,42 @@ const App = () => {
   const AddName = (event) => {
     event.preventDefault();
     if (!newName.trim()) return null;
-    if (
-      persons.find(
-        (person) =>
-          person.name.toLowerCase().trim() === newName.toLowerCase().trim()
-      )
-    ) {
-      alert(`${newName} is already added to phonebook`);
-      setNewName("");
-      return;
+    const userExist = persons.find(
+      (person) =>
+        person.name.toLowerCase().trim() === newName.toLowerCase().trim()
+    );
+    if (userExist) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook. replace the old number with a new one?`
+        )
+      ) {
+        const id = userExist.id;
+        phoneServices
+          .updatePerson(id, {
+            name: userExist.name,
+            number: newNumber.trim(),
+          })
+          .then((res) => {
+            setPersons((persons) =>
+              persons.map((person) => {
+                if (person.id === res.data.id) person.number = res.data.number;
+                return person;
+              })
+            );
+            setNewName("");
+            setNewNumber("");
+            return;
+          });
+        return;
+      }
+      const newObj = { name: newName.trim(), number: newNumber.trim() };
+      phoneServices.create(newObj).then((res) => {
+        setPersons([...persons, res.data]);
+        setNewName("");
+        setNewNumber("");
+      });
     }
-    const newObj = { name: newName.trim(), number: newNumber.trim() };
-    phoneServices.create(newObj).then((res) => {
-      setPersons([...persons, res.data]);
-      setNewName("");
-      setNewNumber("");
-    });
   };
 
   // const handleFilter = (ev) => {
