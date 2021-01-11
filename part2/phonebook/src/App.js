@@ -13,6 +13,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [message, setMessage] = useState("");
+  const [errmessage, setErrmessage] = useState("");
+
   useEffect(() => {
     phoneService.getAll().then((res) => setPersons(res.data));
   }, []);
@@ -87,9 +89,24 @@ const App = () => {
   const contactToShow = handleFilter.length ? handleFilter : persons;
 
   const handleDelete = (id) => {
-    phoneService.removePerson(id).then(() => {
-      setPersons((persons) => persons.filter((person) => person.id !== id));
-    });
+    phoneService
+      .removePerson(id)
+      .then(() => {
+        setPersons((persons) => persons.filter((person) => person.id !== id));
+      })
+      .catch((err) => {
+        if (
+          err.response &&
+          err.response.status &&
+          err.response.status === 404
+        ) {
+          setErrmessage(
+            `${
+              persons.find((person) => person.id === id).name
+            } has already been removed from server`
+          );
+        }
+      });
   };
 
   return (
@@ -97,6 +114,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <p className="message">
         {message && <span className="sucess">{message}</span>}
+        {errmessage && <span className="error">{errmessage}</span>}
       </p>
       <Filter filter={filter} handleFilterCh={handleFilterCh} />
       <h3>Add a new</h3>

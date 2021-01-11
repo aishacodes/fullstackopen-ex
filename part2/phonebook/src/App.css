@@ -9,7 +9,17 @@
   display: flex;
   flex-grow: 1;
 }
-
+.error {
+  border: 2px solid red;
+  color: red;
+  background-color: wheat;
+  padding: 5px;
+  display: flex;
+  flex-grow: 1;
+}
 p.message {
+  width: 25%;
+}
+p.error {
   width: 25%;
 }
