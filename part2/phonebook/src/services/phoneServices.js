@@ -15,9 +15,10 @@ const updatePerson = (id, newObject) => {
   return axios.put(`${baseUrl}/${id}`, newObject);
 };
 
-export default {
+const phoneService = {
   getAll,
   create,
   removePerson,
   updatePerson,
 };
+export default phoneService;

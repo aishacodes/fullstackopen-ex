@@ -3,16 +3,18 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
-import phoneServices from "./services/phoneServices";
+import phoneService from "./services/phoneServices";
+
+import "./App.css";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-
+  const [message, setMessage] = useState("");
   useEffect(() => {
-    phoneServices.getAll().then((res) => setPersons(res.data));
+    phoneService.getAll().then((res) => setPersons(res.data));
   }, []);
 
   const AddName = (event) => {
@@ -29,7 +31,7 @@ const App = () => {
         )
       ) {
         const id = userExist.id;
-        phoneServices
+        phoneService
           .updatePerson(id, {
             name: userExist.name,
             number: newNumber.trim(),
@@ -44,16 +46,21 @@ const App = () => {
             setNewName("");
             setNewNumber("");
             return;
-          });
+          })
+          .catch((er) => console.log(er));
         return;
       }
-      const newObj = { name: newName.trim(), number: newNumber.trim() };
-      phoneServices.create(newObj).then((res) => {
-        setPersons([...persons, res.data]);
-        setNewName("");
-        setNewNumber("");
-      });
     }
+    const newObj = { name: newName.trim(), number: newNumber.trim() };
+    phoneService.create(newObj).then((res) => {
+      setPersons([...persons, res.data]);
+      setMessage(`Added ${newName}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   // const handleFilter = (ev) => {
@@ -80,7 +87,7 @@ const App = () => {
   const contactToShow = handleFilter.length ? handleFilter : persons;
 
   const handleDelete = (id) => {
-    phoneServices.removePerson(id).then(() => {
+    phoneService.removePerson(id).then(() => {
       setPersons((persons) => persons.filter((person) => person.id !== id));
     });
   };
@@ -88,6 +95,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <p className="message">
+        {message && <span className="sucess">{message}</span>}
+      </p>
       <Filter filter={filter} handleFilterCh={handleFilterCh} />
       <h3>Add a new</h3>
       <PersonForm
