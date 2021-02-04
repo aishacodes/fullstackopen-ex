@@ -32,16 +32,18 @@ const App = () => {
           `${newName} is already added to phonebook. replace the old number with a new one?`
         )
       ) {
-        const id = userExist.id;
+        const id = userExist.id || userExist._id;
         phoneService
           .updatePerson(id, {
             name: userExist.name,
             number: newNumber.trim(),
           })
           .then((res) => {
+            console.log(res);
             setPersons((persons) =>
               persons.map((person) => {
-                if (person.id === res.data.id) person.number = res.data.number;
+                if (person.id || person._id === res.data._id || res.data.id)
+                  person.number = res.data.number;
                 return person;
               })
             );
@@ -54,15 +56,21 @@ const App = () => {
       }
     }
     const newObj = { name: newName.trim(), number: newNumber.trim() };
-    phoneService.create(newObj).then((res) => {
-      setPersons([...persons, res.data]);
-      setMessage(`Added ${newName}`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      setNewName("");
-      setNewNumber("");
-    });
+    phoneService
+      .create(newObj)
+      .then((res) => {
+        setPersons([...persons, res.data]);
+        setMessage(`Added ${newName}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        // console.log(error.response.data.error);
+        setErrmessage(error.response.data.error);
+      });
   };
 
   // const handleFilter = (ev) => {
@@ -91,8 +99,10 @@ const App = () => {
   const handleDelete = (id) => {
     phoneService
       .removePerson(id)
-      .then(() => {
-        setPersons((persons) => persons.filter((person) => person.id !== id));
+      .then((res, req) => {
+        setPersons((persons) =>
+          persons.filter((person) => person.id || person._id !== id)
+        );
       })
       .catch((err) => {
         if (
