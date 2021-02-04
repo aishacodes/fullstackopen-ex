@@ -70,6 +70,9 @@ const App = () => {
       .catch((error) => {
         // console.log(error.response.data.error);
         setErrmessage(error.response.data.error);
+        setTimeout(() => {
+          setErrmessage(null);
+        }, 5000);
       });
   };
 
@@ -115,6 +118,9 @@ const App = () => {
               persons.find((person) => person.id === id).name
             } has already been removed from server`
           );
+          setTimeout(() => {
+            setErrmessage(null);
+          }, 5000);
         }
       });
   };
